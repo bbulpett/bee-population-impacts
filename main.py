@@ -6,6 +6,13 @@ import dash
 from dash import dcc, html
 from dash.dependencies import Input, Output
 
+# TODO: Use plotly express to plot a bar chart instead of chloropleth
+#       (x-axis is states, y-axis is bee colonies)
+#       
+#       Make a line chart and change dropdown to things affecting bees
+#       (x-axis is years, y-axis is bee colonies, each state is different color
+#       with a legend to states/colors)
+
 app = dash.Dash(__name__)
 
 # Import and clean data (import CSV into pandas dataframe)
@@ -64,7 +71,25 @@ def update_graph(option_slctd):
     dff = dff[dff["Year"] == option_slctd]  # Defaults to default value
     dff = dff[dff["Affected by"] == "Varroa_mites"]
 
-    # Plotly Express
+    # Plotly Graph Objects (go) - "old school" way
+    # fig = go.Figure(
+    #     data=[go.Choropleth(
+    #         locationmode='USA-states',
+    #         locations=dff['state_code'],
+    #         z=dff["Pct of Colonies Impacted"].astype(float),
+    #         colorscale='Reds',
+    #     )]
+    # )
+    
+    # fig.update_layout(
+    #     title_text="Bees Affected by Mites in the USA",
+    #     title_xanchor="center",
+    #     title_font=dict(size=24),
+    #     title_x=0.5,
+    #     geo=dict(scope='usa'),
+    # )
+
+        # Plotly Express (px) - faster and easier
     # https://plotly.com/python-api-reference/generated/plotly.express.choropleth.html
     fig = px.choropleth(
         data_frame=dff,
